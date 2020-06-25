@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Button from './Button';
 
 const Pad = ({ digits }) => {
@@ -15,7 +15,7 @@ const Pad = ({ digits }) => {
         nine: 9,
     };
     return (
-        <div className='pad'>
+        <Fragment>
             {Object.entries(numbers).map((item) => (
                 <Button
                     key={item[1]}
@@ -24,7 +24,7 @@ const Pad = ({ digits }) => {
                     digits={digits}
                 />
             ))}
-        </div>
+        </Fragment>
     );
 };
 
