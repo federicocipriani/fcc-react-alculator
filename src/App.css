@@ -141,11 +141,11 @@ button {
 }
 
 /* Operations */
-#plus {
+#add {
     grid-column: 4 / 5;
     grid-row: 2 / 3;
 }
-#minus {
+#subtract {
     grid-column: 4 / 5;
     grid-row: 3 / 4;
 }
@@ -153,11 +153,15 @@ button {
     grid-column: 4 / 5;
     grid-row: 4 / 5;
 }
-#division {
+#divide {
     grid-column: 4 / 5;
     grid-row: 5 / 6;
 }
-#equal {
+#equals {
     grid-column: 4 / 5;
+    grid-row: 6 / 7;
+}
+#decimal {
+    grid-column: 3 / 4;
     grid-row: 6 / 7;
 }

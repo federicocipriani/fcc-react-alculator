@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Division = () => {
+const Division = ({ divide }) => {
     return (
-        <div className='keypad' id='division'>
+        <div className='keypad' id='divide' onClick={divide}>
             /
         </div>
     );

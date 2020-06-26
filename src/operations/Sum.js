@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Sum = ({ sum }) => {
+const Sum = ({ add }) => {
     return (
-        <div className='keypad' id='plus' onClick={sum}>
+        <div className='keypad' id='add' onClick={add}>
             +
         </div>
     );

@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Multiply = () => {
+const Multiply = ({ multiply }) => {
     return (
-        <div className='keypad' id='multiply'>
+        <div className='keypad' id='multiply' onClick={multiply}>
             x
         </div>
     );
