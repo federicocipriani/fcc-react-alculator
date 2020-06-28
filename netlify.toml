@@ -1,0 +1,4 @@
+[build]
+base = "fcc-react-alculator"
+publish = "fcc-react-alculator/build/"
+command = "npm run build"
