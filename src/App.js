@@ -50,10 +50,10 @@ class App extends Component {
                     this.state.display[0] === '0'
                 )
             ) {
-                const number = this.state.display + e.target.innerText;
-                if (number.length > 15) {
+                const number = this.state.currentVal + e.target.innerText;
+                if (number.length > 12) {
                     this.setState({
-                        display: 'MAX DIGITS REACHED',
+                        display: 'MAX REACHED',
                         maxLengthReached: true,
                     });
                 } else {
@@ -225,8 +225,14 @@ class App extends Component {
     // RESULTS
 
     equal = () => {
-        let { store, display, currentVal, operation } = this.state;
-        if (currentVal !== '') {
+        let {
+            store,
+            display,
+            currentVal,
+            operation,
+            maxLengthReached,
+        } = this.state;
+        if (currentVal !== '' && !maxLengthReached) {
             switch (operation) {
                 case 'plus':
                     store = +store + +currentVal;
@@ -244,9 +250,9 @@ class App extends Component {
                     break;
             }
 
-            if (String(store).length > 15 && String(store).includes('.')) {
+            if (String(store).length > 12 && String(store).includes('.')) {
                 let matches = String(store).match(/\d+/g);
-                let decimalPlaces = 15 - matches[0].length - 1;
+                let decimalPlaces = 12 - matches[0].length - 1;
                 store =
                     Math.round(store * Math.pow(10, decimalPlaces)) /
                     Math.pow(10, decimalPlaces);
@@ -255,9 +261,9 @@ class App extends Component {
                     display: store,
                     currentVal: '',
                 });
-            } else if (String(store).length > 15) {
+            } else if (String(store).length > 12) {
                 this.setState({
-                    display: 'MAX DIGITS REACHED',
+                    display: 'MAX REACHED',
                     maxLengthReached: true,
                 });
             } else {
