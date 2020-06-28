@@ -1,10 +1,15 @@
 import React from 'react';
 
-const Division = ({ divide }) => {
+const Division = ({ divide, clicked }) => {
     return (
-        <div className='keypad' id='divide' onClick={divide}>
-            /
-        </div>
+        <button
+            className={
+                clicked ? 'keypad operation clicked' : 'keypad operation'
+            }
+            id='divide'
+            onClick={divide}>
+            ÷
+        </button>
     );
 };
 

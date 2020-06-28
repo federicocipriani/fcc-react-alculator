@@ -3,6 +3,7 @@ import './App.css';
 import Pad from './components/Pad';
 import Display from './components/Display';
 import Clear from './components/Clear';
+import Delete from './components/Delete';
 import Decimal from './components/Decimal';
 import Sum from './operations/Sum';
 import Minus from './operations/Minus';
@@ -13,31 +14,51 @@ import Equal from './operations/Equal';
 class App extends Component {
     state = {
         store: 0,
-        total: 0,
         operation: 'plus',
         display: 0,
-        currentVal: 0,
+        currentVal: '',
         updateDisplay: true,
+        clickedState: {
+            clickedPlus: false,
+            clickedMinus: false,
+            clickedMultiply: false,
+            clickedDivision: false,
+        },
+        maxLengthReached: false,
     };
 
+    // ---------------------------------------------------------------
+    // METHODS / OTHER CALCULATOR FUNCTION
     showNumbers = (e) => {
         if (this.state.updateDisplay) {
-            console.log('Value entered = ' + e.target.innerText);
             this.setState({
                 currentVal: e.target.innerText,
                 display: e.target.innerText,
                 updateDisplay: false,
+                clickedState: {
+                    ...this.state.clickedState,
+                    clickedPlus: false,
+                    clickedMinus: false,
+                    clickedMultiply: false,
+                    clickedDivision: false,
+                },
             });
         } else {
             if (
                 !(
-                    this.state.display.length === 1 &&
+                    this.state.currentVal.length === 1 &&
                     this.state.display[0] === '0'
                 )
             ) {
-                console.log('Value entered = ' + e.target.innerText);
-                let number = this.state.display + e.target.innerText;
-                this.setState({ currentVal: number, display: number });
+                const number = this.state.display + e.target.innerText;
+                if (number.length > 15) {
+                    this.setState({
+                        display: 'MAX DIGITS REACHED',
+                        maxLengthReached: true,
+                    });
+                } else {
+                    this.setState({ currentVal: number, display: number });
+                }
             }
         }
     };
@@ -45,21 +66,35 @@ class App extends Component {
     clearState = () => {
         this.setState({
             display: 0,
-            currentVal: 0,
+            currentVal: '',
             operation: 'plus',
-            total: 0,
             store: 0,
             updateDisplay: true,
+            clickedState: {
+                clickedPlus: false,
+                clickedMinus: false,
+                clickedMultiply: false,
+                clickedDivision: false,
+            },
+            maxLengthReached: false,
+        });
+    };
+
+    deleteState = () => {
+        this.setState({
+            display: 0,
+            currentVal: '',
+            updateDisplay: true,
+            maxLengthReached: false,
         });
     };
 
     decimalPoint = (e) => {
-        console.log(e.target.innerText);
-        console.log(this.state.display[this.state.display.length - 1] !== '.');
-        if (this.state.display !== '') {
-            if (!this.state.display.includes('.')) {
+        if (this.state.currentVal !== '') {
+            if (!this.state.currentVal.includes('.')) {
                 this.setState({
                     display: this.state.display + e.target.innerText,
+                    currentVal: this.state.display + e.target.innerText,
                 });
             }
         }
@@ -68,104 +103,208 @@ class App extends Component {
     // ---------------------------------------------------------------
     // OPERATIONS
     add = () => {
-        // this.setState({ store: +this.state.store + +this.state.display });
-
-        // this.partialTotal(this.state);
-        this.equal();
-        this.setState({ operation: 'plus', updateDisplay: true });
-        console.log(this.state.operation);
-
-        // this.setState({
-        //     // store: this.state.display,
-        //     // store: +this.state.store + +this.state.display,
-        //     // display: +this.state.store + +this.state.display,
-        //     // operation: 'plus',
-        //     updateDisplay: true,
-        // });
+        if (!this.state.maxLengthReached) {
+            if (this.state.currentVal === '' || this.state.currentVal === '-') {
+                this.setState({
+                    display: this.state.display,
+                    currentVal: '',
+                    operation: 'plus',
+                    updateDisplay: true,
+                    clickedState: {
+                        ...this.state.clickedState,
+                        clickedPlus: true,
+                        clickedMinus: false,
+                        clickedMultiply: false,
+                        clickedDivision: false,
+                    },
+                });
+            } else {
+                this.equal();
+                this.setState({
+                    operation: 'plus',
+                    updateDisplay: true,
+                    clickedState: {
+                        ...this.state.clickedState,
+                        clickedPlus: true,
+                    },
+                });
+            }
+        }
     };
+
     subtract = () => {
-        this.equal();
-        this.setState({ operation: 'minus', updateDisplay: true });
-        console.log(this.state.operation);
-        // this.setState({
-        //     // store: this.state.display,
-        //     store: +this.state.store - +this.state.display,
-        //     display: +this.state.store - +this.state.display,
-        //     operation: 'minus',
-        //     updateDisplay: true,
-        // });
+        if (!this.state.maxLengthReached) {
+            if (this.state.currentVal === '' || this.state.currentVal === '-') {
+                this.setState({
+                    display: '-',
+                    currentVal: '-',
+                    updateDisplay: false,
+                    clickedState: {
+                        ...this.state.clickedState,
+                        clickedPlus: false,
+                        clickedMinus: true,
+                        clickedMultiply: false,
+                        clickedDivision: false,
+                    },
+                });
+            } else {
+                this.equal();
+                this.setState({
+                    operation: 'minus',
+                    updateDisplay: true,
+                    clickedState: {
+                        ...this.state.clickedState,
+                        clickedMinus: true,
+                    },
+                });
+            }
+        }
     };
+
     multiply = () => {
-        this.equal();
-        this.setState({ operation: 'multiply', updateDisplay: true });
-        // this.setState({
-        //     store: this.state.display,
-        //     // store: +this.state.store * +this.state.display,
-        //     // display: +this.state.store * +this.state.display,
-        //     operation: 'multiply',
-        //     updateDisplay: true,
-        // });
+        if (!this.state.maxLengthReached) {
+            if (this.state.currentVal === '' || this.state.currentVal === '-') {
+                this.setState({
+                    display: this.state.display,
+                    currentVal: '',
+                    operation: 'multiply',
+                    updateDisplay: true,
+                    clickedState: {
+                        ...this.state.clickedState,
+                        clickedPlus: false,
+                        clickedMinus: false,
+                        clickedMultiply: true,
+                        clickedDivision: false,
+                    },
+                });
+            } else {
+                this.equal();
+                this.setState({
+                    operation: 'multiply',
+                    updateDisplay: true,
+                    clickedState: {
+                        ...this.state.clickedState,
+                        clickedMultiply: true,
+                    },
+                });
+            }
+        }
     };
+
     divide = () => {
-        this.equal();
-        this.setState({ operation: 'division', updateDisplay: true });
-        // this.setState({
-        //     store: this.state.display,
-        //     // store: +this.state.store / +this.state.display,
-        //     // display: +this.state.store / +this.state.display,
-        //     operation: 'division',
-        //     updateDisplay: true,
-        // });
+        if (!this.state.maxLengthReached) {
+            if (this.state.currentVal === '' || this.state.currentVal === '-') {
+                this.setState({
+                    display: this.state.display,
+                    currentVal: '',
+                    operation: 'division',
+                    updateDisplay: true,
+                    clickedState: {
+                        ...this.state.clickedState,
+                        clickedPlus: false,
+                        clickedMinus: false,
+                        clickedMultiply: false,
+                        clickedDivision: true,
+                    },
+                });
+            } else {
+                this.equal();
+                this.setState({
+                    operation: 'division',
+                    updateDisplay: true,
+                    clickedState: {
+                        ...this.state.clickedState,
+                        clickedDivision: true,
+                    },
+                });
+            }
+        }
     };
 
     // ---------------------------------------------------------------
     // RESULTS
 
     equal = () => {
-        let { store, display, currentVal, total, operation } = this.state;
-        console.log(`CurrentVal before calc = ${currentVal}`);
-        console.log(`Display before calc = ${display}`);
-        console.log(`Store before calc = ${store}`);
-        console.log(`Operation type = ${operation}`);
-        switch (operation) {
-            case 'plus':
-                store = +store + +currentVal;
-                break;
-            case 'minus':
-                store = +store - +currentVal;
-                break;
-            case 'multiply':
-                store = +store * +currentVal;
-                break;
-            case 'division':
-                store = +store / +currentVal;
-                break;
-            default:
-                break;
+        let { store, display, currentVal, operation } = this.state;
+        if (currentVal !== '') {
+            switch (operation) {
+                case 'plus':
+                    store = +store + +currentVal;
+                    break;
+                case 'minus':
+                    store = +store - +currentVal;
+                    break;
+                case 'multiply':
+                    store = +store * +currentVal;
+                    break;
+                case 'division':
+                    store = +store / +currentVal;
+                    break;
+                default:
+                    break;
+            }
+
+            if (String(store).length > 15 && String(store).includes('.')) {
+                let matches = String(store).match(/\d+/g);
+                let decimalPlaces = 15 - matches[0].length - 1;
+                store =
+                    Math.round(store * Math.pow(10, decimalPlaces)) /
+                    Math.pow(10, decimalPlaces);
+                this.setState({
+                    store: store,
+                    display: store,
+                    currentVal: '',
+                });
+            } else if (String(store).length > 15) {
+                this.setState({
+                    display: 'MAX DIGITS REACHED',
+                    maxLengthReached: true,
+                });
+            } else {
+                this.setState({
+                    store: store,
+                    display: store,
+                    currentVal: '',
+                });
+            }
         }
-        console.log(`Store post calc = ${store}`);
-        this.setState({
-            total: 0,
-            store: store,
-            display: store,
-            currentVal: 0,
-        });
     };
 
     // ---------------------------------------------------------------
     // RENDER
     render() {
         return (
-            <div className='container'>
-                <Display display={this.state.display} />
-                <Clear clearState={this.clearState} />
-                <Sum add={this.add} />
-                <Minus subtract={this.subtract} />
-                <Multiply multiply={this.multiply} />
-                <Division divide={this.divide} />
-                <Equal equal={this.equal} />
-                <Decimal decimal={this.decimalPoint} />
-                <Pad digits={this.showNumbers} />
+            <div className='wrapper'>
+                <h1 id='title'>
+                    <i
+                        className='fab fa-react'
+                        style={{ fontSize: '30px' }}></i>{' '}
+                    ReaC(t)alculator
+                </h1>
+                <div className='container' id='calculator'>
+                    <Display display={this.state.display} />
+                    <Clear clearState={this.clearState} />
+                    <Delete deleteState={this.deleteState} />
+                    <Division
+                        divide={this.divide}
+                        clicked={this.state.clickedState.clickedDivision}
+                    />
+                    <Multiply
+                        multiply={this.multiply}
+                        clicked={this.state.clickedState.clickedMultiply}
+                    />
+                    <Minus
+                        subtract={this.subtract}
+                        clicked={this.state.clickedState.clickedMinus}
+                    />
+                    <Sum
+                        add={this.add}
+                        clicked={this.state.clickedState.clickedPlus}
+                    />
+                    <Equal equal={this.equal} />
+                    <Decimal decimal={this.decimalPoint} />
+                    <Pad digits={this.showNumbers} />
+                </div>
             </div>
         );
     }

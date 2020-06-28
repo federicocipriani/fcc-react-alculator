@@ -2,9 +2,9 @@ import React from 'react';
 
 const Button = ({ id, number, digits }) => {
     return (
-        <div className={`keypad ${id}`} id={id} onClick={digits}>
+        <button className={`keypad digit ${id}`} id={id} onClick={digits}>
             {number}
-        </div>
+        </button>
     );
 };
 

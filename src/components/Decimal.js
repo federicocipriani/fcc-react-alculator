@@ -2,9 +2,9 @@ import React from 'react';
 
 const Decimal = ({ decimal }) => {
     return (
-        <div className='keypad' id='decimal' onClick={decimal}>
+        <button className='keypad digit' id='decimal' onClick={decimal}>
             .
-        </div>
+        </button>
     );
 };
 

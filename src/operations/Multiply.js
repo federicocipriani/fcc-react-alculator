@@ -1,10 +1,15 @@
 import React from 'react';
 
-const Multiply = ({ multiply }) => {
+const Multiply = ({ multiply, clicked }) => {
     return (
-        <div className='keypad' id='multiply' onClick={multiply}>
+        <button
+            className={
+                clicked ? 'keypad operation clicked' : 'keypad operation'
+            }
+            id='multiply'
+            onClick={multiply}>
             x
-        </div>
+        </button>
     );
 };
 

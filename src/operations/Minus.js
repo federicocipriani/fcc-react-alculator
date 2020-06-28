@@ -1,10 +1,15 @@
 import React from 'react';
 
-const Minus = ({ subtract }) => {
+const Minus = ({ subtract, clicked }) => {
     return (
-        <div className='keypad' id='subtract' onClick={subtract}>
+        <button
+            className={
+                clicked ? 'keypad operation clicked' : 'keypad operation'
+            }
+            id='subtract'
+            onClick={subtract}>
             -
-        </div>
+        </button>
     );
 };
 

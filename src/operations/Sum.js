@@ -1,10 +1,15 @@
 import React from 'react';
 
-const Sum = ({ add }) => {
+const Sum = ({ add, clicked }) => {
     return (
-        <div className='keypad' id='add' onClick={add}>
+        <button
+            className={
+                clicked ? 'keypad operation clicked' : 'keypad operation'
+            }
+            id='add'
+            onClick={add}>
             +
-        </div>
+        </button>
     );
 };
 
