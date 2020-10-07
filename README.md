@@ -1,9 +1,11 @@
 # ReaC(t)alculator
-### Calculator built using ReactJS
+## Calculator built using ReactJS
 
-Project created as an assignment for the FreeCodeCamp Front End Libraries certification
+### Technologies
+- ReactJS
+- CSS
 
-### Link
-The current version of the calculator can be found at the link below. 
-
-[ReaC(t)alculator on Netlify](https://fc-reactalculator.netlify.app/)
+### Description
+Project created as an assignment for the FreeCodeCamp Front End Libraries certification.
+The calculator has the same functionalities as the iPhone calculator app.
+One of the features includes a set limit for the number of digits that can be displayed.
